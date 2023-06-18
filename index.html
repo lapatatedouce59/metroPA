@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test PA</title>
+</head>
+<body>
+    <h1>Bienvenue sur ce prototype PMD!</h1>
+    <p>Cette page est une reproduction très incomplète de PMD, mais sur laquelle nous développons une nouvelle technologie!<br>
+        Nous travaillons sur un système de pilote automatique bien plus réaliste, ainsi que sur le comportement des moteurs!
+    </p>
+    <fieldset>
+        <legend>Paramètres basiques</legend>
+        <p>Vitesse: <span id="trainSpeed"></span></p>
+        <table>
+            <tr>
+                <td>
+                    <input type="range" name="throttle" id="throttle" min="-3" max="3">
+                </td>
+                <td>
+                    <p>Traction: <span id="trainThrottle"></span></p>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <input type="range" name="pente" id="slope" min="-10" max="10">
+                </td>
+                <td>
+                    <p>Pente: <span id="trainSlope"></span>%</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="range" name="puissance" id="power" min="0" max="520" value="520">
+                </td>
+                <td>
+                    <p>Puissance: <span id="trainPower"></span>kW</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="range" name="masse" id="masse" min="28" max="42" value="28">
+                </td>
+                <td>
+                    <p>Masse: <span id="trainMasse"></span>T</p>
+                </td>
+            </tr>
+        </table>
+        <legend>Paramètres avancé</legend>
+    </fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <input type="range" name="paLimit" id="paLimit" min="0" max="80" value="0">
+                </td>
+                <td>
+                    <p>Limite de vitesse: <span id="accelSpeedLimit"></span>km/h</p>
+                </td>
+                <td>
+                    <input type="range" name="distanceLimit" id="distance" min="0" max="1000" value="500">
+                </td>
+                <td>
+                    <p>Distance de freinage: <span id="distanceLimit"></span>m</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="startAccel">Démarrer l'accélération</button>
+                </td>
+                <td>
+                    <p>État: <span id="paAccelStatus">Standby</span></p>
+                </td>
+                <td>
+                    <button id="startDecel">Démarrer la décélération</button>
+                </td>
+                <td>
+                    <p>État: <span id="paDecelStatus">Standby</span></p>
+                </td>
+            </tr>
+        </table>
+        <legend>Commandes</legend>
+    </fieldset>
+    <script src="index.js"></script>
+</body>
+</html>

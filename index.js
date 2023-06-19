@@ -7,6 +7,7 @@ let accelSpeedLimit = document.getElementById('accelSpeedLimit')
 let paAccelStatus = document.getElementById('paAccelStatus')
 let paDecelStatus = document.getElementById('paDecelStatus')
 let distanceLimit = document.getElementById('distanceLimit')
+let fuStatus = document.getElementById('fuStatus')
 
 
 let throttle = document.getElementById('throttle')
@@ -17,6 +18,7 @@ let paLimit = document.getElementById('paLimit')
 let startAccel = document.getElementById('startAccel')
 let startDecel = document.getElementById('startDecel')
 let distance = document.getElementById('distance')
+let toggleFU = document.getElementById('toggleFU')
 
 let currentThrottle=parseInt(throttle.value)
 let currentSlope=parseInt(slope.value)
@@ -36,6 +38,7 @@ const maxSpeed = 80;
 
 let accelStart=false
 let decelStart=false
+let fuStart=false
 
 init()
 function init(){
@@ -153,6 +156,36 @@ function update(){
             paAccelStatus.innerText='Standby'
         }
     }
+    if(fuStart===true){
+        fuStatus.innerText='Actif'
+        startAccel.disabled=true
+        startDecel.disabled=true
+        throttle.disabled=true
+        distance.disabled=true
+        paLimit.disabled=true
+        decelStart=false
+        accelStart=false
+        paAccelStatus.innerText='Inactif'
+        paDecelStatus.innerText='Inactif'
+        if(currentSpeed>0){
+            throttle.value=0
+            paAccelStatus.innerText='Freinage d\'urgence'
+            currentSpeed += (((-7)*(((currentPower/1000)/currentMasse)*1.3)));
+        } else {
+            startAccel.disabled=false
+            startDecel.disabled=false
+            distance.disabled=false
+            paLimit.disabled=false
+            throttle.disabled=false
+            fuStatus.innerText='Standby'
+            if(currentSpeed<0){
+                currentSpeed=0
+            }
+            paAccelStatus.innerText='Standby'
+            paDecelStatus.innerText='Standby'
+            fuStart=false
+        }
+    }
 }
 
 function calcSpeed(){
@@ -173,4 +206,7 @@ startAccel.addEventListener('click',()=>{
 })
 startDecel.addEventListener('click',()=>{
     decelStart=true
+})
+toggleFU.addEventListener('click',()=>{
+    fuStart=true
 })

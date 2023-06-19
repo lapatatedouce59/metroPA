@@ -8,6 +8,7 @@ let paAccelStatus = document.getElementById('paAccelStatus')
 let paDecelStatus = document.getElementById('paDecelStatus')
 let distanceLimit = document.getElementById('distanceLimit')
 let fuStatus = document.getElementById('fuStatus')
+let trainDistance = document.getElementById('trainDistance')
 
 
 let throttle = document.getElementById('throttle')
@@ -28,8 +29,10 @@ let currentSpeedLimit=parseInt(paLimit.value)
 let currentDistanceLimit=parseInt(distance.value)
 
 let currentSpeed = 0;
+let currentDistance = 0;
 
-
+let elapsed = 0;
+let paralelDistance = 0;
 
 let delta = 1;
 let lastUpdate = Date.now();
@@ -57,6 +60,7 @@ function update(){
     lastUpdate = rn;
     if(delta>5)delta=5;
     if(delta<=0)return;
+    //elapsed++
 
     currentThrottle=parseInt(throttle.value)
     //currentSlope=parseInt(slope.value)
@@ -71,8 +75,11 @@ function update(){
     trainThrottle.innerText=currentThrottle
     distanceLimit.innerText=currentDistanceLimit
     accelSpeedLimit.innerText=currentSpeedLimit
+    trainDistance.innerText=currentDistance.toFixed(1)
 
     calcSpeed()
+
+    throttleListener()
 
     if(accelStart===true){
         paDecelStatus.innerText='Inactif'
@@ -118,16 +125,7 @@ function update(){
         if(currentSpeed>currentSpeedLimit){
             paDecelStatus.innerText='Starting...'
             if(currentSpeedLimit===0){
-                if(currentSpeed>20){
-                    throttle.value=-3
-                    paDecelStatus.innerText='Palier 1'
-                } else if(currentSpeed<=20&&currentSpeed>5){
-                    throttle.value=-2
-                    paDecelStatus.innerText='Palier 2'
-                } else if(currentSpeed<=5){
-                    throttle.value=-1
-                    paDecelStatus.innerText='Palier 3'
-                }
+                
             } else {
                 let speedPercentage=(currentSpeedLimit/currentSpeed)*100
                 console.log(speedPercentage)
@@ -192,11 +190,16 @@ function calcSpeed(){
     let accelForce = ((currentPower/1000)/currentMasse)*1.3
     //let penteForce = ((currentSlope)||1)
     currentSpeed += ((currentThrottle*accelForce)/**penteForce*/);
-    console.log('Throttle '+currentThrottle+', calculated power '+accelForce+', calculated slope '/*+penteForce*/)
+    //console.log('Throttle '+currentThrottle+', calculated power '+accelForce+', calculated slope '/*+penteForce*/)
     if(currentSpeed > maxSpeed) currentSpeed = maxSpeed;
     if(currentSpeed < 0) currentSpeed = 0;
 
+
     trainSpeed.innerText=currentSpeed.toFixed(2)
+
+    //console.log(elapsed)
+    //console.log(currentDistance)
+    //console.log(currentSpeed*(elapsed/(currentThrottle||1)))
 }
 
 
@@ -210,3 +213,18 @@ startDecel.addEventListener('click',()=>{
 toggleFU.addEventListener('click',()=>{
     fuStart=true
 })
+
+function throttleListener(){
+    //console.log('PD '+paralelDistance+', CS '+currentSpeed)
+    console.log(paralelDistance*currentThrottle*currentSpeed)
+    if(currentThrottle>0){
+        paralelDistance++;
+        currentDistance=((paralelDistance*currentSpeed)/30000)*100
+    } else if(currentThrottle<0){
+        paralelDistance++;
+        currentDistance=((paralelDistance*currentSpeed)/30000)*100
+    } else {
+        paralelDistance++;
+        currentDistance=((paralelDistance*currentSpeed)/30000)*100
+    }
+}
